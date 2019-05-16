@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
+
+import LoginPackage.CSRFToken;
 
 
 /**
@@ -40,33 +43,25 @@ public class WelcomeServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-	
-		System.out.println("Do post lkgdalkgj");
 		//doGet(request, response);
 		
-		Cookie[] cookies = request.getCookies();
-		
-		String cookieValue = null;
-		for(Cookie cookie : cookies){
-		    if("test_cookie".equals(cookie.getName())){
-		    	cookieValue = cookie.getValue();
-		    }
-		}
-		
 		 HttpSession session = request.getSession();
-	        String storedToken = session.getAttribute("crsfToken").toString();
+	        String storedToken = CSRFToken.getToken(session.getId());
 	        String token = request.getParameter("token");
 	        System.out.println(storedToken +"     "+ token);
-	        //do check
 	        
 	        token = token.replace("/","");
 	        if (storedToken.equals(token)) {
 	               System.out.println("You are a valid User");
+	               JOptionPane.showMessageDialog(null, "Valid Request!!!");
+	               
 
 
 	        } else {
 	        	System.out.println("You are not a valid User!! WARNING!!! WARNING!!!");
-	        	}
+	        	JOptionPane.showMessageDialog(null, "Invalid Request");
+	        	
+	        }
 	}
 	
 

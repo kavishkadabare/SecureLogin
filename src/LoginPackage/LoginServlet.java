@@ -49,44 +49,28 @@ public class LoginServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		
+		
 		String userName = request.getParameter("uname");
 		String password =  request.getParameter("psw");
 		
 		if(userName.equals(this.un)) {
 			if(password.equals(this.pw)) {
 				String token = generaeCSRFTokenX();
-				session.setAttribute("crsfToken", token);
+				String sessionId = session.getId();
+				//session.setAttribute("crsfToken", token);
+				CSRFToken.sessionId = sessionId;
+				CSRFToken.token = token;
 				
-				Cookie Kcookie =  this.createCookie("test_cookie", token );
-				response.addCookie(Kcookie);
-				response.sendRedirect("Home.jsp");
+				Cookie Kcookie =  this.createCookie("test_cookie", sessionId );
+				response.addCookie(Kcookie);	
+				request.setAttribute("csrfToken", token);
+				request.getRequestDispatcher("Home.jsp").forward(request, response);
+				
 			}else {
 				JOptionPane.showMessageDialog(null, "Invalid Password");
 				response.sendRedirect("Login.jsp");
 			}
 		}else {
-			 response.setContentType("text/html");
-			 PrintWriter out = response.getWriter();
-		    
-			
-//		        out.println("<script src=\"https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.4/sweetalert2.all.js\"></script>");
-//		        out.println("<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js\"></script>");
-//		        out.println("<script src=\"https://unpkg.com/sweetalert/dist/sweetalert.min.js\"></script");
-//		      
-//		        out.println("<script>");
-//		        out.println("swal({");
-//		        out.println(" title: \"Good job!\",");
-//		        out.println("  text: \"You clicked the button!\",");
-//		        out.println("  icon: \"success\",");
-//		        out.println("button: \"Aww yiss!\",");
-//		        out.println("});");
-		        
-//		        out.println("$(document).ready(function(){");
-//		        out.println("swal('Invalid UserName','Sorry','error');");
-//		        out.println("});");
-		       // out.println("</script>");
-
-			
 			JOptionPane.showMessageDialog(null, "Invalid User Name");
 			response.sendRedirect("Login.jsp");
 		}
