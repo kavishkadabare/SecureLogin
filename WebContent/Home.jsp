@@ -8,5 +8,13 @@
 </head>
 <body>
 <H1>Home </H1>;
+
+<form action="WelcomeServlet" method="POST">
+<%=session.getAttribute("crsfToken") %>
+<input name="token" type ="hidden" value=<%=session.getAttribute("crsfToken")%>/>
+<h4>Type something</h4><input type = "text"/>
+<button type = "submit">Submit </button>
+</form>
+
 </body>
 </html>

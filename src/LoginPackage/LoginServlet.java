@@ -2,12 +2,15 @@ package LoginPackage;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.SecureRandom;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.swing.JOptionPane;
 
 /**
@@ -43,11 +46,19 @@ public class LoginServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 		
+		HttpSession session = request.getSession();
+		
+		
 		String userName = request.getParameter("uname");
 		String password =  request.getParameter("psw");
 		
 		if(userName.equals(this.un)) {
 			if(password.equals(this.pw)) {
+				String token = generaeCSRFTokenX();
+				session.setAttribute("crsfToken", token);
+				
+				Cookie Kcookie =  this.createCookie("test_cookie", token );
+				response.addCookie(Kcookie);
 				response.sendRedirect("Home.jsp");
 			}else {
 				JOptionPane.showMessageDialog(null, "Invalid Password");
@@ -82,5 +93,34 @@ public class LoginServlet extends HttpServlet {
 		
 		
 	}
+	
+	public static String generaeCSRFTokenX() {
+		
+		String CSRFtoken = "";
+		 try {
+             SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+             Integer myInt = sr.nextInt();
+             CSRFtoken = myInt.toString();
+             
+         } catch (Exception e) {
+        	e.printStackTrace();
+         } 
+		 
+		 System.out.println(CSRFtoken);
+		 return CSRFtoken;
+      
+     }
+	
+	private Cookie createCookie(String cookieName, String cookieValue) {
+	    Cookie cookie = new Cookie(cookieName, cookieValue);
+	    cookie.setPath("/");
+	    cookie.setMaxAge(60*60*24);
+	    cookie.setHttpOnly(true);
+	    cookie.setSecure(true);
+	    return cookie;
+	}
+		
+	}
+	
 
-}
+
