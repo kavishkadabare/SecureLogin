@@ -57,7 +57,6 @@ public class LoginServlet extends HttpServlet {
 			if(password.equals(this.pw)) {
 				String token = generaeCSRFTokenX();
 				String sessionId = session.getId();
-				//session.setAttribute("crsfToken", token);
 				CSRFToken.sessionId = sessionId;
 				CSRFToken.token = token;
 				

@@ -48,16 +48,14 @@ public class WelcomeServlet extends HttpServlet {
 		 HttpSession session = request.getSession();
 	        String storedToken = CSRFToken.getToken(session.getId());
 	        String token = request.getParameter("token");
-	        System.out.println(storedToken +"     "+ token);
 	        
 	        token = token.replace("/","");
 	        if (storedToken.equals(token)) {
 	               System.out.println("You are a valid User");
 	               JOptionPane.showMessageDialog(null, "Valid Request!!!");
-	               
-
-
-	        } else {
+	               //Continue with Application
+	               }
+	        else {
 	        	System.out.println("You are not a valid User!! WARNING!!! WARNING!!!");
 	        	JOptionPane.showMessageDialog(null, "Invalid Request");
 	        	
