@@ -38,10 +38,38 @@ button:hover {
 <div align="center" style="width:40%">
 <H1>Home </H1>
 
-<form action="WelcomeServlet" method="POST">
-<input name="token" type ="hidden" value=<%=request.getAttribute("csrfToken")%>/>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+
+/* $(document).on("submit", "#someform", function(event) {
+    var $form = $(this);
+    console.log("Ajax call!!!!!!!");
+    $.post($form.attr("action"), $form.serialize(), function(response) {
+    	 $("#somediv").text(response);
+    	 $("#hidden").value(response);  
+    	 console.log("Ajax Post ");
+    	 console.log(response);
+    }); */
+    
+    $(document).ready(function() { // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+        $.get("WelcomeServlet", function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
+            $("#somediv").text(responseText); // Locate HTML DOM element with ID "somediv" and set its text content with the response text.
+        	$("#hidden").val(responseText);
+            console.log(responseText);
+        });
+
+   
+});
+        </script>
+        
+        
+<form action="WelcomeServlet" method="POST" id="someform">
+
+<input name="token" type ="hidden" id="hidden"/>
 <h4>Type something</h4><input type = "text"/>
-<button type = "submit">Submit </button>
+<button type = "submit" name ="submit" id="submit">Submit </button>
+<div name="divname"></div>
 </form>
 </div>
 </div>
